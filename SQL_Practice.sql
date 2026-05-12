@@ -333,15 +333,109 @@ VALUES
 (29, 'Manish Kulkarni', 'Nashik', FALSE),
 (30, 'Shreya Iyer', 'Kanpur', TRUE);
 
-select * from delivery_orders d
-left join delivery_agent a on d.agent_id = a.agent_id
+select d.order_id, d.customer_name, d.order_date, d.total_amount,
+a.agent_name, a.zone
+from delivery_orders d
+left join delivery_agents a on d.agent_id = a.agent_id
+order by d.order_date, d.order_id asc
+
+--- Task: Show doctor_name, specialization, hospital, and total_appointments for all doctors in 2024. Include doctors with zero appointments. Sort by total_appointments descending.
+
+create table doctors (
+    doctor_id     INT PRIMARY KEY,
+    doctor_name   VARCHAR(100),
+    specialization VARCHAR(100),
+    hospital      VARCHAR(100)
+)
+
+create table appointments (
+    appointment_id  INT PRIMARY KEY,
+    doctor_id       INT,
+    patient_name    VARCHAR(100),
+    appointment_date DATE,
+    status          VARCHAR(20)   -- 'completed', 'cancelled', 'no_show'
+)
+
+-- Insert data into doctors table (30 rows)
+
+INSERT INTO doctors (doctor_id, doctor_name, specialization, hospital)
+VALUES
+(1, 'Dr. Amit Sharma', 'Cardiology', 'Apollo Hospital'),
+(2, 'Dr. Priya Verma', 'Neurology', 'Fortis Hospital'),
+(3, 'Dr. Rahul Patil', 'Orthopedics', 'Lilavati Hospital'),
+(4, 'Dr. Sneha Joshi', 'Dermatology', 'Jaslok Hospital'),
+(5, 'Dr. Vikram Singh', 'Pediatrics', 'Kokilaben Hospital'),
+(6, 'Dr. Neha Kapoor', 'Gynecology', 'Nanavati Hospital'),
+(7, 'Dr. Arjun Mehta', 'ENT', 'Hinduja Hospital'),
+(8, 'Dr. Pooja Nair', 'Ophthalmology', 'Max Hospital'),
+(9, 'Dr. Karan Malhotra', 'Psychiatry', 'AIIMS'),
+(10, 'Dr. Anjali Desai', 'General Medicine', 'Wockhardt Hospital'),
+(11, 'Dr. Rohit Yadav', 'Urology', 'Medanta Hospital'),
+(12, 'Dr. Meera Iyer', 'Oncology', 'Tata Memorial Hospital'),
+(13, 'Dr. Sanjay Kulkarni', 'Nephrology', 'Ruby Hall Clinic'),
+(14, 'Dr. Divya Reddy', 'Endocrinology', 'Care Hospital'),
+(15, 'Dr. Manish Gupta', 'Pulmonology', 'Manipal Hospital'),
+(16, 'Dr. Kavita Shah', 'Gastroenterology', 'Sterling Hospital'),
+(17, 'Dr. Deepak Sinha', 'Radiology', 'Seven Hills Hospital'),
+(18, 'Dr. Ritu Arora', 'Pathology', 'Global Hospital'),
+(19, 'Dr. Nitin Jain', 'Plastic Surgery', 'BLK Hospital'),
+(20, 'Dr. Shreya Das', 'Rheumatology', 'Paras Hospital'),
+(21, 'Dr. Tarun Verma', 'Hematology', 'Columbia Asia Hospital'),
+(22, 'Dr. Aisha Khan', 'Dentistry', 'Smile Care Hospital'),
+(23, 'Dr. Yash Thakur', 'Physiotherapy', 'Sunrise Hospital'),
+(24, 'Dr. Simran Kaur', 'Anesthesiology', 'City Hospital'),
+(25, 'Dr. Harsh Vardhan', 'Immunology', 'Metro Hospital'),
+(26, 'Dr. Nandini Rao', 'Geriatrics', 'Green Life Hospital'),
+(27, 'Dr. Abhishek Mishra', 'Emergency Medicine', 'Lifeline Hospital'),
+(28, 'Dr. Ishita Sen', 'Infectious Disease', 'Zenith Hospital'),
+(29, 'Dr. Gaurav Bansal', 'Sports Medicine', 'Prime Hospital'),
+(30, 'Dr. Tanvi Chawla', 'Nutrition', 'Wellness Hospital');
 
 
 
+-- Insert data into appointments table (30 rows)
+-- doctor_id is linked with doctors.doctor_id
+
+INSERT INTO appointments (appointment_id, doctor_id, patient_name, appointment_date, status)
+VALUES
+(101, 1, 'Ramesh Patil', '2024-05-10', 'completed'),
+(102, 2, 'Sonal Mehta', '2024-05-11', 'cancelled'),
+(103, 3, 'Vikas Sharma', '2024-05-12', 'completed'),
+(104, 4, 'Priti Shah', '2024-05-13', 'no_show'),
+(105, 5, 'Anil Verma', '2024-05-14', 'completed'),
+(106, 6, 'Kiran Joshi', '2024-05-15', 'cancelled'),
+(107, 7, 'Nisha Rao', '2024-05-16', 'completed'),
+(108, 8, 'Suresh Nair', '2024-05-17', 'completed'),
+(109, 9, 'Komal Singh', '2024-05-18', 'no_show'),
+(110, 10, 'Raj Malhotra', '2024-05-19', 'completed'),
+(111, 11, 'Aarti Deshmukh', '2024-05-20', 'cancelled'),
+(112, 12, 'Mohit Yadav', '2024-05-21', 'completed'),
+(113, 13, 'Snehal Patkar', '2024-05-22', 'completed'),
+(114, 14, 'Deepa Rane', '2024-05-23', 'no_show'),
+(115, 15, 'Varun Gupta', '2024-05-24', 'completed'),
+(116, 16, 'Pallavi Jain', '2024-05-25', 'cancelled'),
+(117, 17, 'Rohini Kulkarni', '2024-05-26', 'completed'),
+(118, 18, 'Nitin Arora', '2024-05-27', 'completed'),
+(119, 19, 'Shweta Kapoor', '2024-05-28', 'no_show'),
+(120, 20, 'Akash Mishra', '2024-05-29', 'completed'),
+(121, 21, 'Manoj Das', '2024-05-30', 'cancelled'),
+(122, 22, 'Priyanshi Kaur', '2024-05-31', 'completed'),
+(123, 23, 'Harshit Tiwari', '2024-06-01', 'completed'),
+(124, 24, 'Ananya Roy', '2024-06-02', 'no_show'),
+(125, 25, 'Siddharth Sen', '2024-06-03', 'completed'),
+(126, 26, 'Lavanya Iyer', '2024-06-04', 'cancelled'),
+(127, 27, 'Kunal Bhatia', '2024-06-05', 'completed'),
+(128, 28, 'Rekha Menon', '2024-06-06', 'completed'),
+(129, 29, 'Devansh Arora', '2024-06-07', 'no_show'),
+(130, 30, 'Tanya Chopra', '2024-06-08', 'completed');
 
 
-
-
+select d.doctor_name, d.specialization, d.hospital, count(a.appointment_id) as total_appointments
+from doctors d
+left join appointments a 
+on d.doctor_id = a.doctor_id
+group by d.doctor_id
+order by total_appointments desc
 
 
 
