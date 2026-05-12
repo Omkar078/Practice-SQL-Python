@@ -430,17 +430,169 @@ VALUES
 (130, 30, 'Tanya Chopra', '2024-06-08', 'completed');
 
 
-select d.doctor_name, d.specialization, d.hospital, count(a.appointment_id) as total_appointments
-from doctors d
-left join appointments a 
-on d.doctor_id = a.doctor_id
-group by d.doctor_id
-order by total_appointments desc
+SELECT d.doctor_name, d.specialization, d.hospital,
+       COUNT(a.appointment_id) AS total_appointments
+FROM doctors d
+LEFT JOIN appointments a 
+       ON d.doctor_id = a.doctor_id
+      AND YEAR(a.appointment_date) = 2024
+GROUP BY d.doctor_id, d.doctor_name, d.specialization, d.hospital
+ORDER BY total_appointments DESC;
+
+drop table orders
+
+---- Show product_name, category, total_quantity_sold, and total_revenue for all products.
+-- Only count sales from completed orders in Q1 2024. Products with no qualifying sales show 0 for both metrics. Sort by total_revenue descending.
+
+create table products (
+    product_id    INT PRIMARY KEY,
+    product_name  VARCHAR(100),
+    category      VARCHAR(50),
+    unit_price    DECIMAL(10,2)
+)
+
+create table orders (
+    order_id      INT PRIMARY KEY,
+    order_date    DATE,
+    status        VARCHAR(20)   -- 'completed', 'cancelled', 'returned'
+)
+
+create table order_items (
+    item_id       INT PRIMARY KEY,
+    order_id      INT,
+    product_id    INT,
+    quantity      INT,
+    sale_price    DECIMAL(10,2)
+)
+
+-- Insert data into products table (30 rows)
+
+INSERT INTO products (product_id, product_name, category, unit_price)
+VALUES
+(1, 'Laptop', 'Electronics', 55000.00),
+(2, 'Smartphone', 'Electronics', 25000.00),
+(3, 'Headphones', 'Electronics', 2500.00),
+(4, 'Keyboard', 'Electronics', 1500.00),
+(5, 'Mouse', 'Electronics', 800.00),
+(6, 'Office Chair', 'Furniture', 7000.00),
+(7, 'Study Table', 'Furniture', 9500.00),
+(8, 'Water Bottle', 'Home', 500.00),
+(9, 'Backpack', 'Accessories', 1800.00),
+(10, 'Notebook', 'Stationery', 120.00),
+(11, 'Pen Set', 'Stationery', 300.00),
+(12, 'Printer', 'Electronics', 12000.00),
+(13, 'Monitor', 'Electronics', 15000.00),
+(14, 'Tablet', 'Electronics', 22000.00),
+(15, 'Power Bank', 'Electronics', 1800.00),
+(16, 'Desk Lamp', 'Home', 1200.00),
+(17, 'Fan', 'Home Appliances', 2800.00),
+(18, 'Air Purifier', 'Home Appliances', 9500.00),
+(19, 'Shoes', 'Fashion', 3500.00),
+(20, 'T-Shirt', 'Fashion', 900.00),
+(21, 'Jeans', 'Fashion', 2200.00),
+(22, 'Wrist Watch', 'Accessories', 4500.00),
+(23, 'Sunglasses', 'Accessories', 2500.00),
+(24, 'Coffee Mug', 'Home', 400.00),
+(25, 'Mixer Grinder', 'Home Appliances', 6500.00),
+(26, 'Bedsheet', 'Home', 1800.00),
+(27, 'Curtains', 'Home', 2200.00),
+(28, 'Bluetooth Speaker', 'Electronics', 3200.00),
+(29, 'Router', 'Electronics', 2800.00),
+(30, 'External Hard Drive', 'Electronics', 6000.00);
 
 
 
+-- Insert data into orders table (30 rows)
+
+INSERT INTO orders (order_id, order_date, status)
+VALUES
+(101, '2024-05-01', 'completed'),
+(102, '2024-05-02', 'cancelled'),
+(103, '2024-05-03', 'completed'),
+(104, '2024-05-04', 'returned'),
+(105, '2024-05-05', 'completed'),
+(106, '2024-05-06', 'cancelled'),
+(107, '2024-05-07', 'completed'),
+(108, '2024-05-08', 'returned'),
+(109, '2024-05-09', 'completed'),
+(110, '2024-05-10', 'completed'),
+(111, '2024-05-11', 'cancelled'),
+(112, '2024-05-12', 'completed'),
+(113, '2024-05-13', 'returned'),
+(114, '2024-05-14', 'completed'),
+(115, '2024-05-15', 'completed'),
+(116, '2024-05-16', 'cancelled'),
+(117, '2024-05-17', 'completed'),
+(118, '2024-05-18', 'returned'),
+(119, '2024-05-19', 'completed'),
+(120, '2024-05-20', 'completed'),
+(121, '2024-05-21', 'cancelled'),
+(122, '2024-05-22', 'completed'),
+(123, '2024-05-23', 'returned'),
+(124, '2024-05-24', 'completed'),
+(125, '2024-05-25', 'completed'),
+(126, '2024-05-26', 'cancelled'),
+(127, '2024-05-27', 'completed'),
+(128, '2024-05-28', 'returned'),
+(129, '2024-05-29', 'completed'),
+(130, '2024-05-30', 'completed');
 
 
+
+-- Insert data into order_items table (30 rows)
+-- order_id linked with orders.order_id
+-- product_id linked with products.product_id
+
+INSERT INTO order_items (item_id, order_id, product_id, quantity, sale_price)
+VALUES
+(1, 101, 1, 1, 54000.00),
+(2, 102, 2, 1, 24500.00),
+(3, 103, 3, 2, 2400.00),
+(4, 104, 4, 1, 1400.00),
+(5, 105, 5, 3, 750.00),
+(6, 106, 6, 1, 6800.00),
+(7, 107, 7, 1, 9200.00),
+(8, 108, 8, 4, 450.00),
+(9, 109, 9, 2, 1700.00),
+(10, 110, 10, 5, 100.00),
+(11, 111, 11, 3, 280.00),
+(12, 112, 12, 1, 11500.00),
+(13, 113, 13, 1, 14500.00),
+(14, 114, 14, 1, 21000.00),
+(15, 115, 15, 2, 1700.00),
+(16, 116, 16, 2, 1100.00),
+(17, 117, 17, 1, 2600.00),
+(18, 118, 18, 1, 9000.00),
+(19, 119, 19, 2, 3300.00),
+(20, 120, 20, 4, 850.00),
+(21, 121, 21, 2, 2100.00),
+(22, 122, 22, 1, 4300.00),
+(23, 123, 23, 2, 2400.00),
+(24, 124, 24, 6, 350.00),
+(25, 125, 25, 1, 6200.00),
+(26, 126, 26, 2, 1700.00),
+(27, 127, 27, 2, 2100.00),
+(28, 128, 28, 1, 3000.00),
+(29, 129, 29, 1, 2600.00),
+(30, 130, 30, 1, 5800.00);
+
+SELECT 
+    p.product_name,
+    p.category,
+    COALESCE(SUM(oi.quantity), 0) AS total_quantity_sold,
+    COALESCE(SUM(oi.quantity * oi.sale_price), 0) AS total_revenue
+FROM products p
+LEFT JOIN order_items oi 
+    ON p.product_id = oi.product_id
+LEFT JOIN orders o 
+    ON oi.order_id = o.order_id
+    AND o.status = 'completed'
+    AND o.order_date BETWEEN '2024-01-01' AND '2024-03-31'
+GROUP BY 
+    p.product_id,
+    p.product_name,
+    p.category
+ORDER BY total_revenue DESC;
 
 
 
