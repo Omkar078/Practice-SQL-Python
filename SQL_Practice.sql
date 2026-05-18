@@ -595,9 +595,432 @@ GROUP BY
 ORDER BY total_revenue DESC;
 
 
+drop table shipments 
+
+create table shipments (
+    shipment_id    INT PRIMARY KEY,
+    dispatch_date  DATE,
+    destination    VARCHAR(100),
+    weight_kg      DECIMAL(8,2),
+    shipment_value DECIMAL(10,2),
+    status         VARCHAR(20)  -- 'dispatched','in_transit','delivered','failed'
+)
+
+INSERT INTO shipments (
+    shipment_id,
+    dispatch_date,
+    destination,
+    weight_kg,
+    shipment_value,
+    status
+) VALUES
+(1,  '2026-01-05', 'Mumbai',        120.50,  45000.00, 'dispatched'),
+(2,  '2026-01-07', 'Delhi',          85.75,  32000.00, 'in_transit'),
+(3,  '2026-01-10', 'Bangalore',     200.00,  78000.00, 'delivered'),
+(4,  '2026-01-12', 'Pune',           95.20,  28000.00, 'failed'),
+(5,  '2026-01-15', 'Hyderabad',     150.40,  54000.00, 'delivered'),
+(6,  '2026-01-18', 'Chennai',       175.90,  61000.00, 'in_transit'),
+(7,  '2026-01-20', 'Kolkata',       110.30,  39000.00, 'dispatched'),
+(8,  '2026-01-22', 'Ahmedabad',      98.60,  35000.00, 'delivered'),
+(9,  '2026-01-25', 'Jaipur',        140.75,  47000.00, 'failed'),
+(10, '2026-01-28', 'Lucknow',        88.40,  30000.00, 'delivered'),
+(11, '2026-02-02', 'Nagpur',        132.00,  42000.00, 'in_transit'),
+(12, '2026-02-05', 'Indore',        105.25,  36000.00, 'dispatched'),
+(13, '2026-02-08', 'Surat',         190.80,  72000.00, 'delivered'),
+(14, '2026-02-10', 'Bhopal',         76.50,  25000.00, 'failed'),
+(15, '2026-02-13', 'Patna',         160.00,  59000.00, 'in_transit'),
+(16, '2026-02-16', 'Kanpur',         92.70,  31000.00, 'delivered'),
+(17, '2026-02-18', 'Vadodara',      145.10,  50000.00, 'dispatched'),
+(18, '2026-02-21', 'Ludhiana',      170.35,  64000.00, 'delivered'),
+(19, '2026-02-24', 'Agra',           80.90,  27000.00, 'failed'),
+(20, '2026-02-27', 'Nashik',        115.60,  41000.00, 'in_transit'),
+(21, '2026-03-03', 'Faridabad',     125.45,  43000.00, 'delivered'),
+(22, '2026-03-06', 'Rajkot',         99.80,  34000.00, 'dispatched'),
+(23, '2026-03-09', 'Meerut',        185.20,  70000.00, 'in_transit'),
+(24, '2026-03-12', 'Varanasi',       90.00,  29500.00, 'failed'),
+(25, '2026-03-15', 'Amritsar',      155.75,  56000.00, 'delivered'),
+(26, '2026-03-18', 'Aurangabad',    102.30,  37500.00, 'dispatched'),
+(27, '2026-03-21', 'Coimbatore',    178.90,  66000.00, 'in_transit'),
+(28, '2026-03-24', 'Mysore',         87.65,  28500.00, 'delivered'),
+(29, '2026-03-27', 'Jodhpur',       148.50,  52000.00, 'failed'),
+(30, '2026-03-30', 'Guwahati',      165.00,  60000.00, 'delivered');
+
+select dispatch_date, count(s.shipment_id ) as total_shipments, sum(s.shipment_value) as total_value
+from shipments s 
+group by (dispatch_date)
+order by dispatch_date asc
+
+create table plans (
+    plan_id        INT PRIMARY KEY,
+    plan_name      VARCHAR(50),
+    billing_cycle  VARCHAR(20),  -- 'monthly', 'annual', 'lifetime'
+    price          DECIMAL(10,2),
+    is_active      BOOLEAN
+)
+
+
+INSERT INTO plans (
+    plan_id,
+    plan_name,
+    billing_cycle,
+    price,
+    is_active
+) VALUES
+(1,  'Basic Starter',      'monthly',   499.00,  TRUE),
+(2,  'Basic Starter',      'annual',   4999.00,  TRUE),
+(3,  'Pro Business',       'monthly',   999.00,  TRUE),
+(4,  'Pro Business',       'annual',   9999.00,  TRUE),
+(5,  'Enterprise',         'monthly',  1999.00,  TRUE),
+(6,  'Enterprise',         'annual',  19999.00,  TRUE),
+(7,  'Lifetime Gold',      'lifetime', 49999.00, TRUE),
+(8,  'Student Pack',       'monthly',   299.00,  TRUE),
+(9,  'Student Pack',       'annual',   2999.00,  TRUE),
+(10, 'Freelancer Plus',    'monthly',   699.00,  TRUE),
+(11, 'Freelancer Plus',    'annual',   6999.00,  TRUE),
+(12, 'Startup Growth',     'monthly',  1299.00,  TRUE),
+(13, 'Startup Growth',     'annual',  12999.00,  TRUE),
+(14, 'Corporate Elite',    'monthly',  2499.00,  TRUE),
+(15, 'Corporate Elite',    'annual',  24999.00,  TRUE),
+(16, 'Legacy Premium',     'lifetime', 79999.00, FALSE),
+(17, 'Health Care Plan',   'monthly',   899.00,  TRUE),
+(18, 'Health Care Plan',   'annual',   8999.00,  TRUE),
+(19, 'Education Prime',    'monthly',   599.00,  TRUE),
+(20, 'Education Prime',    'annual',   5999.00,  TRUE),
+(21, 'Family Secure',      'monthly',  1499.00,  TRUE),
+(22, 'Family Secure',      'annual',  14999.00,  TRUE),
+(23, 'Retail Connect',     'monthly',  1099.00,  TRUE),
+(24, 'Retail Connect',     'annual',  10999.00,  TRUE),
+(25, 'Silver Access',      'monthly',   399.00,  FALSE),
+(26, 'Silver Access',      'annual',   3999.00,  FALSE),
+(27, 'Gold Access',        'monthly',   799.00,  TRUE),
+(28, 'Gold Access',        'annual',   7999.00,  TRUE),
+(29, 'VIP Lifetime',       'lifetime', 99999.00, TRUE),
+(30, 'Partner Exclusive',  'annual',  15999.00, TRUE);
+
+
+select billing_cycle, MAX(price) as max_price, MIN(price) as min_price, avg(price) as avg_price
+from plans
+group by plan_id
+order by  avg_price desc
+
+drop table customers
+
+
+drop table orders
+
+
+create table customers (
+    customer_id  INT PRIMARY KEY,
+    full_name    VARCHAR(100),
+    city         VARCHAR(50)
+)
+
+create table orders (
+    order_id      INT PRIMARY KEY,
+    customer_id   INT,
+    order_date    DATE,
+    status        VARCHAR(20),   -- 'completed','cancelled','returned'
+    order_amount  DECIMAL(10,2)
+)
+
+-- Customers Table Insert (customer_id values repeated in Orders table)
+
+INSERT INTO customers (
+    customer_id,
+    full_name,
+    city
+) VALUES
+(1,  'Amit Sharma',       'Mumbai'),
+(2,  'Priya Verma',       'Delhi'),
+(3,  'Rahul Patil',       'Pune'),
+(4,  'Sneha Joshi',       'Bangalore'),
+(5,  'Vikram Singh',      'Hyderabad'),
+(6,  'Neha Kapoor',       'Chennai'),
+(7,  'Rohan Desai',       'Ahmedabad'),
+(8,  'Pooja Nair',        'Kolkata'),
+(9,  'Karan Mehta',       'Jaipur'),
+(10, 'Anjali Kulkarni',   'Nagpur');
+
+
+-- Orders Table Insert
+-- Same customer_id appears multiple times across different orders
+
+INSERT INTO orders (
+    order_id,
+    customer_id,
+    order_date,
+    status,
+    order_amount
+) VALUES
+(101, 1,  '2026-01-05', 'completed',  2500.00),
+(102, 2,  '2026-01-06', 'cancelled',  1800.00),
+(103, 1,  '2026-01-08', 'completed',  3200.00),
+(104, 3,  '2026-01-10', 'returned',   2100.00),
+(105, 4,  '2026-01-12', 'completed',  4500.00),
+(106, 2,  '2026-01-15', 'completed',  3900.00),
+(107, 5,  '2026-01-18', 'cancelled',  2750.00),
+(108, 6,  '2026-01-20', 'completed',  5100.00),
+(109, 3,  '2026-01-22', 'returned',   1600.00),
+(110, 7,  '2026-01-25', 'completed',  4300.00),
+(111, 8,  '2026-02-01', 'completed',  2900.00),
+(112, 1,  '2026-02-03', 'completed',  6100.00),
+(113, 9,  '2026-02-05', 'cancelled',  1750.00),
+(114, 10, '2026-02-08', 'completed',  3400.00),
+(115, 4,  '2026-02-10', 'returned',   2200.00),
+(116, 5,  '2026-02-12', 'completed',  4700.00),
+(117, 2,  '2026-02-15', 'completed',  3800.00),
+(118, 6,  '2026-02-18', 'cancelled',  2600.00),
+(119, 7,  '2026-02-20', 'completed',  5500.00),
+(120, 3,  '2026-02-24', 'returned',   1950.00),
+(121, 8,  '2026-03-01', 'completed',  4100.00),
+(122, 9,  '2026-03-04', 'completed',  3650.00),
+(123, 10, '2026-03-06', 'cancelled',  2800.00),
+(124, 1,  '2026-03-08', 'completed',  7200.00),
+(125, 4,  '2026-03-10', 'returned',   2400.00),
+(126, 5,  '2026-03-12', 'completed',  5300.00),
+(127, 2,  '2026-03-15', 'completed',  3100.00),
+(128, 6,  '2026-03-18', 'cancelled',  2000.00),
+(129, 7,  '2026-03-20', 'completed',  6000.00),
+(130, 3,  '2026-03-25', 'returned',   1750.00);
 
 
 
+select c.city, Count(c.customer_id) as completed_orders, round(avg(order_amount), 2) as avg_order_value
+from customer c 
+left join orders o 
+on c.customer_id = o.customer_id
+where o.status = 'completed'
+group by c.customer_id 
+
+
+drop table appointments
+
+
+create table doctors (
+    doctor_id    INT PRIMARY KEY,
+    doctor_name  VARCHAR(100),
+    specialization VARCHAR(100)
+)
+
+create table appointments (
+    appointment_id   INT PRIMARY KEY,
+    doctor_id        INT,
+    patient_name     VARCHAR(100),
+    booked_date      DATE,
+    appointment_date DATE,
+    status           VARCHAR(20)  -- 'completed','cancelled','no_show'
+)
+
+-- Doctors Table Insert
+
+INSERT INTO doctors (
+    doctor_id,
+    doctor_name,
+    specialization
+) VALUES
+(1,  'Dr. Amit Shah',        'Cardiology'),
+(2,  'Dr. Priya Mehta',      'Dermatology'),
+(3,  'Dr. Rahul Verma',      'Orthopedics'),
+(4,  'Dr. Sneha Kulkarni',   'Pediatrics'),
+(5,  'Dr. Vikram Joshi',     'Neurology'),
+(6,  'Dr. Neha Kapoor',      'Gynecology'),
+(7,  'Dr. Rohan Patil',      'ENT'),
+(8,  'Dr. Pooja Nair',       'Ophthalmology'),
+(9,  'Dr. Karan Desai',      'Psychiatry'),
+(10, 'Dr. Anjali Singh',     'General Medicine');
+
+
+-- Appointments Table Insert
+-- doctor_id is repeated across multiple appointments
+
+INSERT INTO appointments (
+    appointment_id,
+    doctor_id,
+    patient_name,
+    booked_date,
+    appointment_date,
+    status
+) VALUES
+(101, 1,  'Ramesh Gupta',      '2026-01-02', '2026-01-05', 'completed'),
+(102, 2,  'Sonal Jain',        '2026-01-03', '2026-01-06', 'cancelled'),
+(103, 1,  'Aakash Sharma',     '2026-01-04', '2026-01-07', 'completed'),
+(104, 3,  'Priti Yadav',       '2026-01-05', '2026-01-08', 'no_show'),
+(105, 4,  'Nitin Patil',       '2026-01-06', '2026-01-09', 'completed'),
+(106, 2,  'Kavya Mehra',       '2026-01-07', '2026-01-10', 'completed'),
+(107, 5,  'Manoj Rao',         '2026-01-08', '2026-01-11', 'cancelled'),
+(108, 6,  'Divya Sharma',      '2026-01-09', '2026-01-12', 'completed'),
+(109, 3,  'Harsh Vyas',        '2026-01-10', '2026-01-13', 'no_show'),
+(110, 7,  'Meena Joshi',       '2026-01-11', '2026-01-14', 'completed'),
+(111, 8,  'Ritika Nair',       '2026-02-01', '2026-02-04', 'completed'),
+(112, 1,  'Sameer Kulkarni',   '2026-02-02', '2026-02-05', 'completed'),
+(113, 9,  'Anu Verma',         '2026-02-03', '2026-02-06', 'cancelled'),
+(114, 10, 'Kiran Deshmukh',    '2026-02-04', '2026-02-07', 'completed'),
+(115, 4,  'Pallavi Shah',      '2026-02-05', '2026-02-08', 'no_show'),
+(116, 5,  'Rohit Sinha',       '2026-02-06', '2026-02-09', 'completed'),
+(117, 2,  'Tanya Kapoor',      '2026-02-07', '2026-02-10', 'completed'),
+(118, 6,  'Arjun Malhotra',    '2026-02-08', '2026-02-11', 'cancelled'),
+(119, 7,  'Shweta Rao',        '2026-02-09', '2026-02-12', 'completed'),
+(120, 3,  'Deepak Yadav',      '2026-02-10', '2026-02-13', 'no_show'),
+(121, 8,  'Nisha Patkar',      '2026-03-01', '2026-03-04', 'completed'),
+(122, 9,  'Abhishek Jain',     '2026-03-02', '2026-03-05', 'completed'),
+(123, 10, 'Ruchi Sharma',      '2026-03-03', '2026-03-06', 'cancelled'),
+(124, 1,  'Vivek More',        '2026-03-04', '2026-03-07', 'completed'),
+(125, 4,  'Komal Singh',       '2026-03-05', '2026-03-08', 'no_show'),
+(126, 5,  'Naveen Gupta',      '2026-03-06', '2026-03-09', 'completed'),
+(127, 2,  'Sakshi Patil',      '2026-03-07', '2026-03-10', 'completed'),
+(128, 6,  'Varun Khanna',      '2026-03-08', '2026-03-11', 'cancelled'),
+(129, 7,  'Isha Mehta',        '2026-03-09', '2026-03-12', 'completed'),
+(130, 3,  'Pranav Kulkarni',   '2026-03-10', '2026-03-13', 'no_show');
+
+SELECT 
+    d.doctor_name,
+    d.specialization,
+    COUNT(a.appointment_id) AS total_appointments, 
+    SUM(
+        CASE 
+            WHEN a.status = 'completed' THEN 1 
+            ELSE 0 
+        END
+    ) AS completed_appointments,
+    ROUND(
+        (
+            SUM(
+                CASE 
+                    WHEN a.status = 'cancelled' THEN 1 
+                    ELSE 0 
+                END
+            ) * 100.0
+        ) / COUNT(a.appointment_id),
+        1
+    ) AS cancellation_rate,
+    ROUND(
+        AVG(
+            TIMESTAMPDIFF(DAY, a.booked_date, a.appointment_date)
+        ),
+        1
+    ) AS avg_days_to_appointment
+FROM doctors d
+JOIN appointments a 
+    ON d.doctor_id = a.doctor_id
+GROUP BY 
+    d.doctor_name,
+    d.specialization
+ORDER BY 
+    cancellation_rate DESC;
+
+drop table customers
+
+drop table transactions
+
+
+create table customers (
+    customer_id   INT PRIMARY KEY,
+    full_name     VARCHAR(100),
+    account_type  VARCHAR(20)   -- 'savings','current','premium'
+)
+
+
+create table transactions (
+    txn_id         INT PRIMARY KEY,
+    customer_id    INT,
+    txn_date       DATE,
+    txn_amount     DECIMAL(12,2),
+    txn_type       VARCHAR(20)  -- 'credit','debit'
+)
+
+
+
+-- Customers Table Insert
+
+INSERT INTO customers (
+    customer_id,
+    full_name,
+    account_type
+) VALUES
+(1,  'Amit Sharma',       'savings'),
+(2,  'Priya Verma',       'current'),
+(3,  'Rahul Patil',       'premium'),
+(4,  'Sneha Joshi',       'savings'),
+(5,  'Vikram Singh',      'current'),
+(6,  'Neha Kapoor',       'premium'),
+(7,  'Rohan Desai',       'savings'),
+(8,  'Pooja Nair',        'current'),
+(9,  'Karan Mehta',       'premium'),
+(10, 'Anjali Kulkarni',   'savings');
+
+
+-- Transactions Table Insert
+-- customer_id is repeated across multiple transactions
+
+INSERT INTO transactions (
+    txn_id,
+    customer_id,
+    txn_date,
+    txn_amount,
+    txn_type
+) VALUES
+(101, 1,  '2026-01-05',  5000.00, 'credit'),
+(102, 2,  '2026-01-06',  2500.00, 'debit'),
+(103, 1,  '2026-01-08',  7200.00, 'credit'),
+(104, 3,  '2026-01-10',  3100.00, 'debit'),
+(105, 4,  '2026-01-12',  4500.00, 'credit'),
+(106, 2,  '2026-01-15',  1800.00, 'credit'),
+(107, 5,  '2026-01-18',  3900.00, 'debit'),
+(108, 6,  '2026-01-20',  6100.00, 'credit'),
+(109, 3,  '2026-01-22',  2700.00, 'debit'),
+(110, 7,  '2026-01-25',  5400.00, 'credit'),
+(111, 8,  '2026-02-01',  3200.00, 'debit'),
+(112, 1,  '2026-02-03',  8500.00, 'credit'),
+(113, 9,  '2026-02-05',  2100.00, 'debit'),
+(114, 10, '2026-02-08',  4700.00, 'credit'),
+(115, 4,  '2026-02-10',  1600.00, 'debit'),
+(116, 5,  '2026-02-12',  5900.00, 'credit'),
+(117, 2,  '2026-02-15',  4300.00, 'debit'),
+(118, 6,  '2026-02-18',  7800.00, 'credit'),
+(119, 7,  '2026-02-20',  2400.00, 'debit'),
+(120, 3,  '2026-02-24',  6600.00, 'credit'),
+(121, 8,  '2026-03-01',  3500.00, 'credit'),
+(122, 9,  '2026-03-04',  2900.00, 'debit'),
+(123, 10, '2026-03-06',  5100.00, 'credit'),
+(124, 1,  '2026-03-08',  9200.00, 'debit'),
+(125, 4,  '2026-03-10',  4100.00, 'credit'),
+(126, 5,  '2026-03-12',  3000.00, 'debit'),
+(127, 2,  '2026-03-15',  6400.00, 'credit'),
+(128, 6,  '2026-03-18',  2200.00, 'debit'),
+(129, 7,  '2026-03-20',  7300.00, 'credit'),
+(130, 3,  '2026-03-25',  2800.00, 'debit');
+
+
+SELECT
+    c.full_name,
+    c.account_type,
+    DATE_FORMAT(t.txn_date, '%Y-%m') AS txn_month,
+    COUNT(t.txn_id) AS total_transactions,
+    SUM(t.txn_amount) AS total_amount,
+    ROUND(AVG(t.txn_amount), 2) AS avg_monthly_amount,
+    MAX(t.txn_amount) AS max_transaction,
+    CASE
+        WHEN AVG(t.txn_amount) > (
+            2 * (
+                SELECT AVG(t2.txn_amount)
+                FROM transactions t2
+                WHERE t2.customer_id = c.customer_id
+            )
+        )
+        THEN 'YES'
+        ELSE 'NO'
+    END AS is_spike
+FROM customers c
+JOIN transactions t
+    ON c.customer_id = t.customer_id
+GROUP BY
+    c.customer_id,
+    c.full_name,
+    c.account_type,
+    DATE_FORMAT(t.txn_date, '%Y-%m')
+ORDER BY
+    c.full_name,
+    txn_month;
 
 
 
