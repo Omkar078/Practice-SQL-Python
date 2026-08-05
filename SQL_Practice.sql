@@ -1066,6 +1066,28 @@ inner join sakila.payment p on r.rental_id = p.rental_id
 group by i.store_id
 order by total_revenue desc
 
+---- List all customers along with the store they belong to (show customer_id, first_name, last_name, store_id)
+
+select c.customer_id, c.first_name, c.last_name, c.store_id 
+from sakila.customer c 
+inner join sakila.store s on c.store_id = s.store_id 
+
+---- Find all films that have never been rented (i.e., no rows in rental/inventory for that film). Use a LEFT JOIN.
+
+select r.*
+from sakila.rental r 
+left join sakila.inventory i on r.inventory_id = i.inventory_id 
+where r.rental_id is null
+
+--- List all actors along with the titles of films they've acted in — but this time, include actors who haven't acted in any film (if any exist). Show first_name, last_name, title
+
+select a.first_name, a.last_name, f.title
+from sakila.actor a 
+left join sakila.film_actor fa on a.actor_id = fa.actor_id 
+inner join sakila.film f on f.film_id = fa.film_id 
+where fa.film_id is null
+
+
 
 
 
