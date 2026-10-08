@@ -1087,6 +1087,42 @@ left join sakila.film_actor fa on a.actor_id = fa.actor_id
 inner join sakila.film f on f.film_id = fa.film_id 
 where fa.film_id is null
 
+--- 2026
+
+--- 1. ist all films with title, rating, and length, sorted by length descending
+
+select f.title, f.rating, f.`length`  
+from sakila.film f 
+order by f.`length` desc
+
+---  Find the 10 shortest PG-13 films.
+
+select f.title, f.`length` 
+from sakila.film f 
+where f.rating = "PG-13"
+order by `length` ASC
+limit 10
+
+--- List films with a replacement cost above 25 and a rental rate below 1.
+
+select f.title, f.replacement_cost , f.rental_rate 
+from sakila.film f 
+where f.replacement_cost > 25
+and f.rental_rate < 1
+
+--- Show the distinct ratings and the distinct rental durations in film
+
+SELECT DISTINCT f.rating FROM sakila.film f;
+SELECT DISTINCT f.rental_duration FROM sakila.film f;
+
+
+--- Find films released in 2006 whose title starts with “A” and ends with “S”
+
+select f.title, f.release_year 
+from sakila.film f 
+where f.release_year = '2006'
+and (f.title like "A%" and f.title like "%S")
+
 
 
 
